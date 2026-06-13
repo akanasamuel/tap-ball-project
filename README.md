@@ -1,0 +1,12 @@
+# Tap Ball
+
+##Technologies
+-HTML
+-Javascript
+-CSS
+-All in an html file.
+
+##Features
+-Random spawning ball
+-Score tracker
+-levels
