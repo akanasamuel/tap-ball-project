@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+    body{
+      background: linear-gradient(to right,grey,dimgrey);
+      
+    }
+    #name{
+      font-size: 2.5em;
+      font-style: italic;
+      text-align: center;
+      color: blue;
+    }
+    h1{
+      font-size: 1.5em;
+      color: lime;
+    }
+    #menu {
+      width: 500px;
+      height: 300px;
+      justify-self: center;
+      padding: 10px;
+      background: black;
+      border-radius: 20px;
+      text-align: center;
+      
+    }
+    #winWindow{
+      width: 300px;
+      height: 200px;
+      justify-self: center;
+      padding: 10px;
+      background: blue;
+      border-radius: 20px;
+      text-align: center;
+      display: none;
+    }
+    #gameoverWindow{
+      width: 300px;
+      height: 200px;
+      justify-self: center;
+      padding: 10px;
+      background: red;
+      border-radius: 20px;
+      text-align: center;
+      display: none;
+    }
+    
+    #target{
+      padding: 20px;
+      background: green;
+      width: 1px;
+      border-radius: 100px;
+      position: absolute;
+      box-shadow:  0 0 5px 1px lime;
+      justify-self: center;
+      display: none;
+      
+    }
+
+    button{
+      padding: 10px;
+      border-radius: 10px;
+      color: blue;
+      display: block;
+      margin: 10px;
+      justify-self: center;
+    }
+    button:hover{
+      background: lightgrey;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 id = "name">Tap Ball</h1>
+  <h1 id="timer"> Timer :</h1>
+  <h1 >Score:</h1>
+  <h1 id="score">0</h1>
+
+  <div id="menu">
+    <h1>Menu</h1>
+    <button class="btn" id="playbtn">PLAY</button>
+    <button class="btn" class="quitbtn">QUIT</button>
+
+  </div>
+  <div id="winWindow">
+    <h1> You Win!</h1>
+    <h1 id="level">level 1</h1>
+    <button class="btn" id="nextbtn">Next Level</button>
+    <button class="btn" class="quitbtn">QUIT</button>
+  </div>
+  <div id="gameoverWindow">
+    <h1>Game Over</h1>
+    <h1 id="finalscore">Score: </h1>
+    <button class="btn" id="retrybtn">RETRY</button>
+    <button class="btn" class="quitbtn">QUIT</button>
+    
+  </div>
+  <div id="target"></div>
+  <script>
+    let target = document.getElementById("target")
+    let score = document.getElementById("score")
+    let menu = document.getElementById("menu")
+    let winWindow = document.getElementById("winWindow")
+    let gameOverWindow = document.getElementById("gameoverWindow")
+    
+    let playbtn = document.getElementById("playbtn")
+    let quitbtn = document.querySelectorAll(".quitbtn")
+    let retrybtn = document.getElementById("retrybtn")
+    let nextbtn = document.getElementById("nextbtn")
+    
+    let count = 0
+    let baseCount = 0
+    let targetScore = 20
+    let time = 30
+    let baseTime = 30
+    let level = 1
+    
+    let timer = document.getElementById("timer")
+    let levelText = document.getElementById("level")
+    let finalscore = document.getElementById("finalscore")
+
+function gameFunc(){
+    let timecount = setInterval(()=>{
+      time--
+      timer.textContent = "Timer : " + time + " s"
+      if (time <= 0){
+        clearInterval(timecount)
+        clearInterval(ballMovement)
+        gameOverWindow.style.display = "block"
+        target.style.display = "none"
+        finalscore.textContent = "Final Score: "+ count
+        
+      }
+    },1000)
+    
+    let ballMovement = setInterval(()=>{
+      let randPositionX = Math.random() * window.innerWidth
+      let randPositionY = Math.random() * window.innerHeight
+  
+      target.style.left = randPositionX + "px"
+      target.style.top = randPositionY + "px"
+      
+    },1500)
+    target.addEventListener("click",targetClickFunc)
+    function targetClickFunc() {
+      count++
+      score.textContent = count
+      if (count == targetScore) {
+        clearInterval(timecount)
+        clearInterval(ballMovement)
+        winWindow.style.display = "block"
+        target.style.display = "none"
+        levelText.textContent = "Level " + level + " completed"
+      }
+    
+      target.style.left = Math.random() * window.innerWidth-target.offsetWidth + "px"
+      target.style.top = Math.random() * window.innerHeight-target.offsetHeight + "px"
+      target.style.transform = "scale(2)"
+      setTimeout(() => { target.style.transform = "scale(1)" }, 10)
+      
+    }      
+}    
+
+playbtn.addEventListener("click",()=>{
+  target.style.display = "inline-block"
+  gameFunc()
+  menu.style.display ="none"
+})
+
+nextbtn.addEventListener("click",()=>{
+  time = baseTime-10
+  count = 0
+  level++
+  score.textContent = count
+  targetScore+=10
+  winWindow.style.display = "none"
+  target.style.display = "block"
+  gameFunc()
+})
+retrybtn.addEventListener("click",()=>{
+  time = baseTime
+  count= 0
+  score.textContent = count
+  gameOverWindow.style.display = "none"
+  target.style.display = "block"
+  gameFunc()
+})
+  </script>
+</body>
+
+</html>
