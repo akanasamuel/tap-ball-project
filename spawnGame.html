@@ -4,31 +4,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+  <title>Tap Ball</title>
   <style>
     body{
-      background: linear-gradient(to right,grey,dimgrey);
+      background: grey;
       
     }
     #name{
-      font-size: 2.5em;
-      font-style: italic;
+      font-size: 5em;
+      font-weight: bold;
       text-align: center;
-      color: blue;
-    }
-    h1{
-      font-size: 1.5em;
       color: lime;
     }
+    #hud{
+      display: flex;
+      width: 90%;
+      justify-content: space-between;
+      margin: auto;
+      border: 5px  solid blue;
+      background: white;
+      padding-left: 20px;
+      padding-right: 20px;
+
+    }
+    h1{
+      font-size: 2em;
+      color: blue;
+    }
     #menu {
-      width: 500px;
-      height: 300px;
+      width: 95%;
+      height: 650px;
       justify-self: center;
       padding: 10px;
       background: black;
       border-radius: 20px;
       text-align: center;
+      box-shadow: 1px 1px 1px 1px lime;
+      display: none;
       
+    }
+    #menu button{
+      width: 500px;
+      font-size: 2em;
+      border-color: lime;
+      font-weight: bold;
+    }
+    #menu button:hover{
+      transform: scale(1.1);
+      border-color: blue;
     }
     #winWindow{
       width: 300px;
@@ -50,17 +73,30 @@
       text-align: center;
       display: none;
     }
-    
+    #game-area{
+      width: 95%;
+      height: 450px;
+      border: 5px  solid blue;
+      background: black;
+      justify-self: center;
+      position: relative;
+      top: 1px;
+
+    }
     #target{
       padding: 20px;
       background: green;
       width: 1px;
       border-radius: 100px;
       position: absolute;
-      box-shadow:  0 0 5px 1px lime;
+      box-shadow:  0 0 5px 3px lime;
       justify-self: center;
-      display: none;
+      top: 200px;
       
+    }
+    #bottom-hud{
+      display: flex;
+      justify-content: space-between;
     }
 
     button{
@@ -70,6 +106,7 @@
       display: block;
       margin: 10px;
       justify-self: center;
+      font-size: 1.3em;
     }
     button:hover{
       background: lightgrey;
@@ -78,111 +115,153 @@
 </head>
 
 <body>
-  <h1 id = "name">Tap Ball</h1>
-  <h1 id="timer"> Timer :</h1>
-  <h1 >Score:</h1>
-  <h1 id="score">0</h1>
+  <div id="hud">
+    <h1 id="timer"> Timer :</h1>
+    <h1> Level 1 </h1>
+    <div>
+      <h1>Score:</h1>
+      <h1 id="score">0</h1>  
+    </div>
+  </div>
 
   <div id="menu">
-    <h1>Menu</h1>
-    <button class="btn" id="playbtn">PLAY</button>
-    <button class="btn" class="quitbtn">QUIT</button>
-
+    <h1 id = "name">Tap Ball</h1>
+    <h1> </h1>
+    <button id="playbtn">PLAY</button>
+    <button id="">MODE</button>
+    <button id="">SHOP</button>
+    <button id="">TUTORIAL</button>
+    <button id="">SETTINGS</button>
   </div>
+  
   <div id="winWindow">
     <h1> You Win!</h1>
     <h1 id="level">level 1</h1>
-    <button class="btn" id="nextbtn">Next Level</button>
-    <button class="btn" class="quitbtn">QUIT</button>
+    <button id="nextbtn">Next Level</button>
+    <button id="quitbtn1">QUIT</button>
   </div>
+  
   <div id="gameoverWindow">
     <h1>Game Over</h1>
     <h1 id="finalscore">Score: </h1>
-    <button class="btn" id="retrybtn">RETRY</button>
-    <button class="btn" class="quitbtn">QUIT</button>
+    <button id="retrybtn">RETRY</button>
+    <button id="quitbtn2">QUIT</button>
     
   </div>
-  <div id="target"></div>
+  <div id="game-area">
+    <div id="target"></div>
+  </div>
+  <div id="bottom-hud">
+    <button> Power Up</button>
+    <button > Pause</button>
+    <button > QUIT</button>
+  </div>
   <script>
+    let body = document.querySelector('body')
     let target = document.getElementById("target")
+    let gameArea = document.getElementById("game-area")
+    let hud = document.getElementById("hud")
     let score = document.getElementById("score")
     let menu = document.getElementById("menu")
     let winWindow = document.getElementById("winWindow")
-    let gameOverWindow = document.getElementById("gameoverWindow")
+    let gameOverWindow = document.getElementById("gameOverWindow")
+    let bottomHud = document.getElementById("bottom-Hud")
     
     let playbtn = document.getElementById("playbtn")
-    let quitbtn = document.querySelectorAll(".quitbtn")
+    let quitbtn1 = document.getElementById("quitbtn1")
+    let quitbtn2 = document.getElementById("quitbtn2")
     let retrybtn = document.getElementById("retrybtn")
     let nextbtn = document.getElementById("nextbtn")
     
     let count = 0
     let baseCount = 0
-    let targetScore = 20
-    let time = 30
-    let baseTime = 30
+    let targetScore = 10
+    let time = 40
+    let baseTime = 40
     let level = 1
     
     let timer = document.getElementById("timer")
     let levelText = document.getElementById("level")
     let finalscore = document.getElementById("finalscore")
-
-function gameFunc(){
-    let timecount = setInterval(()=>{
-      time--
-      timer.textContent = "Timer : " + time + " s"
-      if (time <= 0){
-        clearInterval(timecount)
-        clearInterval(ballMovement)
-        gameOverWindow.style.display = "block"
-        target.style.display = "none"
-        finalscore.textContent = "Final Score: "+ count
-        
-      }
-    },1000)
     
-    let ballMovement = setInterval(()=>{
-      let randPositionX = Math.random() * window.innerWidth
-      let randPositionY = Math.random() * window.innerHeight
+    let timecount
+    let ballMovement
+function gameFunc(){
+  timecount = setInterval(()=>{
+    time--
+    timer.textContent = "Timer : " + time + " s"
+    if (time <= 0){
+      clearInterval(timecount)
+      clearInterval(ballMovement)
+      gameOverWindow.style.display = "block"
+      target.style.display = "none"
+      hud.style.display = "none"
+      gameArea.style.display ="none"
+      bottomHud.style.display ="none"
+      finalscore.textContent = "Final Score: "+ count
+    }
+  },1000)
+    
+    ballMovement = setInterval(()=>{
+      let randPositionX = Math.random() * (window.innerWidth-target.offsetWidth)
+      let randPositionY = Math.random() * (window.innerHeight-target.offsetHeight)
   
       target.style.left = randPositionX + "px"
       target.style.top = randPositionY + "px"
       
     },1500)
-    target.addEventListener("click",targetClickFunc)
-    function targetClickFunc() {
-      count++
-      score.textContent = count
-      if (count == targetScore) {
-        clearInterval(timecount)
-        clearInterval(ballMovement)
-        winWindow.style.display = "block"
-        target.style.display = "none"
-        levelText.textContent = "Level " + level + " completed"
-      }
-    
-      target.style.left = Math.random() * window.innerWidth-target.offsetWidth + "px"
-      target.style.top = Math.random() * window.innerHeight-target.offsetHeight + "px"
-      target.style.transform = "scale(2)"
-      setTimeout(() => { target.style.transform = "scale(1)" }, 10)
-      
-    }      
 }    
-
+function targetClickFunc() {
+  count+=10
+  score.textContent = count
+  if(count >= targetScore) {
+    clearInterval(timecount)
+    clearInterval(ballMovement)
+    winWindow.style.display = "block"
+    hud.style.display = "none"
+    gameArea.style.display ="none"
+    bottomHud.style.display ="none"
+    target.style.display = "none"
+    levelText.textContent = "Level " + level + " completed"
+  }
+  target.style.left = Math.random() * (window.innerWidth-target.offsetWidth) + "px"
+  target.style.top = Math.random() * (window.innerHeight-target.offsetHeight) + "px"
+  target.style.transform = "scale(2)"
+  setTimeout(() => { target.style.transform = "scale(1)" }, 10)
+      
+}
+target.addEventListener("click",targetClickFunc)
 playbtn.addEventListener("click",()=>{
+  menu.style.display ="none"
+  hud.style.display = "flex"
+  gameArea.style.display ="block"
+  bottomHud.style.display ="flex"
+  time = 40
+  count = baseCount
   target.style.display = "inline-block"
   gameFunc()
-  menu.style.display ="none"
 })
 
 nextbtn.addEventListener("click",()=>{
-  time = baseTime-10
-  count = 0
-  level++
-  score.textContent = count
-  targetScore+=10
-  winWindow.style.display = "none"
-  target.style.display = "block"
-  gameFunc()
+  clearInterval(timecount)
+  clearInterval(ballMovement)  
+  baseTime -= 10
+  
+  if(baseTime <= 0){
+  clearInterval(timecount)
+  winWindow.style.display = "block"
+  levelText.textContent = "All levels completed"
+  }
+  else{
+    time = baseTime
+    count = 0
+    level++
+    score.textContent = count
+    targetScore+=10
+    winWindow.style.display = "none"
+    target.style.display = "block"
+    gameFunc()
+  }
 })
 retrybtn.addEventListener("click",()=>{
   time = baseTime
@@ -192,6 +271,19 @@ retrybtn.addEventListener("click",()=>{
   target.style.display = "block"
   gameFunc()
 })
+quitbtn1.addEventListener("click",()=>{
+  winWindow.style.display = "none"
+  target.style.display = "none"  
+  gameOverWindow.style.display = "none"
+  menu.style.display ="block"
+})
+quitbtn2.addEventListener("click",()=>{
+  winWindow.style.display = "none"
+  target.style.display = "none"  
+  gameOverWindow.style.display = "none"
+  menu.style.display ="block"
+})
+
   </script>
 </body>
 
