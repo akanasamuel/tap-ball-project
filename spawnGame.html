@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+  <title>Tap Ball</title>
   <style>
     body{
       background: linear-gradient(to right,grey,dimgrey);
@@ -86,20 +86,20 @@
   <div id="menu">
     <h1>Menu</h1>
     <button class="btn" id="playbtn">PLAY</button>
-    <button class="btn" class="quitbtn">QUIT</button>
-
   </div>
+  
   <div id="winWindow">
     <h1> You Win!</h1>
     <h1 id="level">level 1</h1>
-    <button class="btn" id="nextbtn">Next Level</button>
-    <button class="btn" class="quitbtn">QUIT</button>
+    <button id="nextbtn">Next Level</button>
+    <button id="quitbtn1">QUIT</button>
   </div>
+  
   <div id="gameoverWindow">
     <h1>Game Over</h1>
     <h1 id="finalscore">Score: </h1>
-    <button class="btn" id="retrybtn">RETRY</button>
-    <button class="btn" class="quitbtn">QUIT</button>
+    <button id="retrybtn">RETRY</button>
+    <button id="quitbtn2">QUIT</button>
     
   </div>
   <div id="target"></div>
@@ -111,21 +111,21 @@
     let gameOverWindow = document.getElementById("gameoverWindow")
     
     let playbtn = document.getElementById("playbtn")
-    let quitbtn = document.querySelectorAll(".quitbtn")
+    let quitbtn1 = document.getElementById("quitbtn1")
+    let quitbtn2 = document.getElementById("quitbtn2")
     let retrybtn = document.getElementById("retrybtn")
     let nextbtn = document.getElementById("nextbtn")
     
     let count = 0
     let baseCount = 0
-    let targetScore = 20
-    let time = 30
-    let baseTime = 30
+    let targetScore = 30
+    let time = 40
+    let baseTime = 40
     let level = 1
     
     let timer = document.getElementById("timer")
     let levelText = document.getElementById("level")
     let finalscore = document.getElementById("finalscore")
-
 function gameFunc(){
     let timecount = setInterval(()=>{
       time--
@@ -148,34 +148,37 @@ function gameFunc(){
       target.style.top = randPositionY + "px"
       
     },1500)
-    target.addEventListener("click",targetClickFunc)
-    function targetClickFunc() {
-      count++
-      score.textContent = count
-      if (count == targetScore) {
-        clearInterval(timecount)
-        clearInterval(ballMovement)
-        winWindow.style.display = "block"
-        target.style.display = "none"
-        levelText.textContent = "Level " + level + " completed"
-      }
-    
-      target.style.left = Math.random() * window.innerWidth-target.offsetWidth + "px"
-      target.style.top = Math.random() * window.innerHeight-target.offsetHeight + "px"
-      target.style.transform = "scale(2)"
-      setTimeout(() => { target.style.transform = "scale(1)" }, 10)
-      
-    }      
 }    
+function targetClickFunc() {
+  count++
+  score.textContent = count
+  if (count >= targetScore) {
+    clearInterval(timecount)
+    clearInterval(ballMovement)
+    winWindow.style.display = "block"
+    target.style.display = "none"
+    levelText.textContent = "Level " + level + " completed"
+  }
+  target.style.left = Math.random() * window.innerWidth-target.offsetWidth + "px"
+  target.style.top = Math.random() * window.innerHeight-target.offsetHeight + "px"
+  target.style.transform = "scale(2)"
+  setTimeout(() => { target.style.transform = "scale(1)" }, 10)
+      
+}
 
+target.addEventListener("click",targetClickFunc)
 playbtn.addEventListener("click",()=>{
+  time = time
+  count = baseCount
+  clearInterval()
   target.style.display = "inline-block"
   gameFunc()
   menu.style.display ="none"
 })
 
 nextbtn.addEventListener("click",()=>{
-  time = baseTime-10
+  baseTime -=10 
+  time = baseTime
   count = 0
   level++
   score.textContent = count
@@ -192,6 +195,19 @@ retrybtn.addEventListener("click",()=>{
   target.style.display = "block"
   gameFunc()
 })
+quitbtn1.addEventListener("click",()=>{
+  winWindow.style.display = "none"
+  target.style.display = "none"  
+  gameOverWindow.style.display = "none"
+  menu.style.display ="block"
+})
+quitbtn2.addEventListener("click",()=>{
+  winWindow.style.display = "none"
+  target.style.display = "none"  
+  gameOverWindow.style.display = "none"
+  menu.style.display ="block"
+})
+
   </script>
 </body>
 
