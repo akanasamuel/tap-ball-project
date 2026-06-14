@@ -7,6 +7,9 @@
 -All in an html file.
 
 ##Features
--Random spawning ball
--Score tracker
--levels
+- Random spawning ball
+- Score tracker
+- Levels and modes
+- Menu
+- Shop
+- Inventory
