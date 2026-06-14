@@ -8,7 +8,6 @@
   <style>
     body{
       background: grey;
-      
     }
     #name{
       font-size: 5em;
@@ -32,16 +31,21 @@
       font-size: 2em;
       color: blue;
     }
+    h2{
+      font-size: 1.2em;
+      color: lime;
+    }
     #menu {
       width: 95%;
       height: 650px;
+      position: relative;
       justify-self: center;
       padding: 10px;
       background: black;
-      border-radius: 20px;
+      border-radius: 10px;
       text-align: center;
       box-shadow: 1px 1px 1px 1px lime;
-  
+      display: block;
       
     }
     #menu button{
@@ -54,33 +58,85 @@
       transform: scale(1.1);
       border-color: blue;
     }
-    #winWindow{
+    #mode-options{
+      background: darkblue;
       width: 300px;
+      display: inline-block;
+      border-radius: 10px;
+      border: 2px solid lightblue;
+      position: absolute;
+      justify-self: center;
+      right: 30px;
+      bottom: 90px;
+      display: none;
+    }
+    #mode-options div{
+      border: 1px solid white;
+    }
+    #mode-options div:hover {
+      background: lightblue;  
+    }
+    #mode-options button{
+      width: 200px;
+      background: red;
+      color: black;
+      border: 1px solid black;
+    }
+    #loadscreen{
+      display: flex;
+      justify-content: center;
+      justify-content: space-between;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      background: darkblue;
+      color: lime;
+      font-size: 2em;
+      font-weight: bold;
+      display: none;
+    }
+    #winWindow{
+      width: 50%;
       height: 500px;
       justify-self: center;
       padding: 10px;
-      background: blue;
-      border-radius: 20px;
+      background: black;
+      border-radius: 10px;
       text-align: center;
       position: relative;
       top: 100px;
       display: none;
     }
     #gameoverWindow{
-      width: 300px;
+      width: 50%;
       height: 500px;
       justify-self: center;
       padding: 10px;
       background: red;
       border-radius: 20px;
-      text-align: center
+      text-align: center;
       position: relative;
       top: 100px;
       display: none;
     }
+    #winWindow button{
+      width: 500px;
+      font-weight: bold;
+    }
+    #winWindow button:hover{
+      transform: scale(1.1);
+    }
+    #gameoverWindow button{
+      width: 500px;
+      font-weight: bold;
+    }
+    #gameoverWindow button:hover{
+      transform: scale(1.1);
+    }    
     #game-area{
       width: 95%;
-      height: 450px;
+      height: 430px;
       border: 5px  solid blue;
       background: black;
       justify-self: center;
@@ -103,12 +159,19 @@
     #bottom-hud{
       display: flex;
       justify-content: space-between;
+      border: 5px solid blue;
+      background: white;
+      position: relative;
+      top: 2px;
       display: none;
+      
     }
-
+    #bottom-hud button{
+      border-color: blue; 
+    }
     button{
       padding: 10px;
-      border-radius: 10px;
+      border-radius: 5px;
       color: blue;
       display: block;
       margin: 10px;
@@ -133,18 +196,38 @@
 
   <div id="menu">
     <h1 id = "name">Tap Ball</h1>
-    <h1> </h1>
+    <h2></h2>
     <button id="playbtn">PLAY</button>
-    <button id="">MODE</button>
-    <button id="">SHOP</button>
-    <button id="">TUTORIAL</button>
-    <button id="">SETTINGS</button>
+    <button id="modebtn">MODE</button>
+    <div id="mode-options" >
+      <div>
+        <button id="closebtn">CLOSE</button>
+      </div>
+      <div id="normal">
+        <h1>Target Score</h1>
+      </div>
+      <div id="timed">
+        <h1>Timed</h1>
+      </div>
+      <div id=endless>
+        <h1>Endless</h1>
+      </div>
+    </div>
+    <button id="shopbtn">SHOP</button>
+    <button id="tutorialbtn">TUTORIAL</button>
+    <button id="settingsbtn">SETTINGS</button>
   </div>
-  
+  <div id="loadscreen">
+    <h1>TAP BALL</h1>
+    <h2>LOADING......</h2>
+    <h2>Tips : </h2>
+  </div>
   <div id="winWindow">
     <h1> You Win!</h1>
     <h1 id="level">level 1</h1>
-    <button id="nextbtn">Next Level</button>
+    <h2> Time Remaining : </h2>
+    <button id="nextbtn">NEXT LEVEL</button>
+    <button id="inventorybtn1">INVENTORY</button>
     <button id="quitbtn1">QUIT</button>
   </div>
   
@@ -152,6 +235,7 @@
     <h1>Game Over</h1>
     <h1 id="finalscore">Score: </h1>
     <button id="retrybtn">RETRY</button>
+    <button id="inventorybtn1">INVENTORY</button>
     <button id="quitbtn2">QUIT</button>
     
   </div>
@@ -159,11 +243,12 @@
     <div id="target"></div>
   </div>
   <div id="bottom-hud">
-    <button> Power Up</button>
-    <button > Pause</button>
+    <button>Power Up</button>
+    <button id="pausebtn">Pause</button>
     <button > QUIT</button>
   </div>
   <script>
+  //DOM ELEMENTS
     let body = document.querySelector('body')
     let target = document.getElementById("target")
     let gameArea = document.getElementById("game-area")
@@ -173,26 +258,95 @@
     let winWindow = document.getElementById("winWindow")
     let gameOverWindow = document.getElementById("gameoverWindow")
     let bottomHud = document.getElementById("bottom-hud")
+    let loadscreen = document.getElementById("loadscreen")
     
     let playbtn = document.getElementById("playbtn")
+    let modebtn = document.getElementById("modebtn")
+    let shopbtn = document.getElementById("shopbtn")
+    let tutorialbtn = document.getElementById("tutorialbtn")
+    let settingsbtn = document.getElementById("settingsbtn")
+    
     let quitbtn1 = document.getElementById("quitbtn1")
     let quitbtn2 = document.getElementById("quitbtn2")
     let retrybtn = document.getElementById("retrybtn")
     let nextbtn = document.getElementById("nextbtn")
+    let pausebtn = document.getElementById("pausebtn")
     
-    let count = 0
-    let baseCount = 0
-    let targetScore = 10
-    let time = 40
-    let baseTime = 40
-    let level = 1
-    
+    let modeOptions = document.getElementById("mode-options")
+    let closebtn = document.getElementById("closebtn") 
+    let normalmode = document.getElementById("normal")
+    let timedmode = document.getElementById("timed")
+    let endlessmode = document.getElementById("endless")
+
     let timer = document.getElementById("timer")
     let levelText = document.getElementById("level")
     let finalscore = document.getElementById("finalscore")
     
+    let inventory = []
+    
+    //VARIABLES
+    // VALUES
+    let count = 0
+    let increaseVal = 2
+    let baseCount = 0
+    let targetScore = 10
+    let time = 40
+    let baseTime = 40
+    let timerate = 1000
+    let level = 1
+    let coins = 1000
+    
+    let mode
+    
+    //BOOLEANS
+  
+    
+    //INTERVALS
     let timecount
     let ballMovement
+    
+    //OBJECTS AND CLASSES
+    class Item{
+      constructor(name,itemtype,price){
+        this.name = name
+        this.itemtype = itemtype
+        this.price = price
+      }
+    }
+    class PowerUp extends Item{
+      constructor(poweruptype,effectduration){
+        this.poweruptype = poweruptype
+        this.effectduration = effectduration
+      }
+    }
+    class BonusTokens extends Item{
+      constructor(bonusmultiplier){
+        this.bonusmultiplier = bonusmultiplier
+      }
+    }
+    //GAME FUNCTIONS
+    
+function loadscreenFunc(callback){
+  loadscreen.style.display = "flex"
+  setTimeout(()=>{
+    loadscreen.style.display = "none"
+    callback()
+  },2000)
+}
+function pauseFunc(){
+  if(pausebtn.textContent == "Pause"){
+    clearInterval(timecount)
+    clearInterval(ballMovement)
+    pausebtn.textContent = "Resume"
+  }
+  else if(pausebtn.textContent=="Resume"){
+    pausebtn.textContent = "Pause"
+    clearInterval(timecount)
+    clearInterval(ballMovement)    
+    gameFunc()
+  }
+}
+
 function gameFunc(){
   timecount = setInterval(()=>{
     time--
@@ -206,7 +360,7 @@ function gameFunc(){
       bottomHud.style.display ="none"
       finalscore.textContent = "Final Score: "+ count
     }
-  },1000)
+  },timerate)
     
     ballMovement = setInterval(()=>{
       let randPositionX = Math.random() * (gameArea.offsetWidth-target.offsetWidth)
@@ -218,7 +372,7 @@ function gameFunc(){
     },1500)
 }    
 function targetClickFunc() {
-  count+=2
+  count+=increaseVal
   score.textContent = count
   if(count >= targetScore) {
     clearInterval(timecount)
@@ -236,14 +390,18 @@ function targetClickFunc() {
       
 }
 target.addEventListener("click",targetClickFunc)
+
+// BUTTONS FUNCTIONS
 playbtn.addEventListener("click",()=>{
   menu.style.display ="none"
+  loadscreenFunc(()=>{
   hud.style.display = "flex"
   gameArea.style.display ="block"
   bottomHud.style.display ="flex"
   time = 40
   count = baseCount
   gameFunc()
+  })
 })
 
 nextbtn.addEventListener("click",()=>{
@@ -263,10 +421,12 @@ nextbtn.addEventListener("click",()=>{
     score.textContent = count
     targetScore+=10
     winWindow.style.display = "none"
+    loadscreenFunc(()=>{
     hud.style.display = "flex"
     gameArea.style.display = "block"
     bottomHud.style.display = "flex"    
     gameFunc()
+    })
   }
 })
 retrybtn.addEventListener("click",()=>{
@@ -274,23 +434,41 @@ retrybtn.addEventListener("click",()=>{
   count= 0
   score.textContent = count
   gameOverWindow.style.display = "none"
+  loadscreenFunc(()=>{
   hud.style.display = "flex"
   gameArea.style.display = "block"
   bottomHud.style.display = "flex"
   gameFunc()
+  })
 })
 quitbtn1.addEventListener("click",()=>{
   winWindow.style.display = "none"
-  target.style.display = "none"  
+  hud.style.display = "none"
+  gameArea.style.display = "none"
+  bottomHud.style.display = "none" 
   gameOverWindow.style.display = "none"
+  loadscreenFunc(()=>{
   menu.style.display ="block"
+  })
 })
 quitbtn2.addEventListener("click",()=>{
   winWindow.style.display = "none"
-  target.style.display = "none"  
+  hud.style.display = "none"
+  gameArea.style.display = "none"
+  bottomHud.style.display = "none"  
   gameOverWindow.style.display = "none"
+  loadscreenFunc(()=>{
   menu.style.display ="block"
+  })
 })
+pausebtn.onclick = pauseFunc
+
+//MODE BUTTONS FUNCTIONS
+modebtn.addEventListener("click",()=>{modeOptions.style.display = "inline-block"})
+closebtn.addEventListener("click",()=>{modeOptions.style.display = "none"})
+normalmode.addEventListener("click",()=>{mode = "normal"})
+timedmode.addEventListener("click",()=>{mode = "timed"})
+endlessmode.addEventListener("click",()=>{mode = "endless"})
 
   </script>
 </body>
