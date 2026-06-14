@@ -12,7 +12,7 @@
     #name{
       font-size: 5em;
       font-weight: bold;
-      text-align: center;
+      margin: 5px;
       color: lime;
     }
     #hud{
@@ -82,6 +82,77 @@
       color: black;
       border: 1px solid black;
     }
+    #shopmenu{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      height: 650px;
+      padding-left: 10px;
+      background: black;
+      justify-self: center;
+      border-radius: 10px;
+      border: 2px solid blue;
+      position: relative;
+      display: none;
+      
+    }
+    #shopmenu .category{
+      width: 100%;
+      border: 1px solid ;
+    }
+    .category div{
+      width: 30%;
+      display: flex;
+      justify-content: space-between;
+      display: inline-block;
+      margin-left: 20px;
+      background: white;
+      box-shadow: 1px 1px 1px 5px blue;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .category div:hover{
+      transform: scale(1.05);
+    }
+    .category button{
+      background: lime;
+    }
+    .category button:hover{
+      transform: scale(1.05);
+      background: green;
+    }
+    #shopmenu h1{
+      color: lime;
+    }
+    
+    #shopheader{
+      display: flex;
+      justify-content: space-between;
+    }
+    #inventorybtn3{
+      position: absolute;
+      left: 100px;
+      background: black;
+      border: 2px solid blue;
+      color: lime;
+      font-weight: bold;
+    }
+    #inventorybtn3:hover{
+      background: grey;
+      color: black;
+    }
+    #coins-display{
+      position: absolute;
+      right: 10px;
+    }
+    
+    #backbtn1{
+      position: absolute;
+      padding: 0px;
+      transform: scale(1.5);
+      left: 10px;
+    }
     #loadscreen{
       display: flex;
       justify-content: center;
@@ -89,7 +160,7 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
-      height: 100vh;
+      height: 98vh;
       background: darkblue;
       color: lime;
       font-size: 2em;
@@ -196,7 +267,7 @@
 
   <div id="menu">
     <h1 id = "name">Tap Ball</h1>
-    <h2></h2>
+    <h1 id ="modedisplay" style="color: cyan">Mode : </h1>
     <button id="playbtn">PLAY</button>
     <button id="modebtn">MODE</button>
     <div id="mode-options" >
@@ -217,6 +288,50 @@
     <button id="tutorialbtn">TUTORIAL</button>
     <button id="settingsbtn">SETTINGS</button>
   </div>
+  <div id="shopmenu">
+    <div id="shopheader">
+      <button id="backbtn1">🔙</button>
+      <button id="inventorybtn3">INVENTORY</button>
+      <h1>SHOP</h1>
+      <h1 id="coins-display">💰 Coins 1000 </h1>
+    </div>
+    <div class="category" id="powerupsection">
+      <h1>Power Ups</h1>
+      <div>
+        <h2>Time-Stop </h2>
+        <p>Stop the timer from counting down for 5 seconds</p>
+        <button id="purchasebtn1">Buy 500💰 </button>
+      </div>
+      <div>
+        <h2>Auto-Clicker </h2>
+        <p>Automatically taps the ball accurately for 5 seconds</p>
+        <button id="purchasebtn2">Buy 500💰 </button>
+      </div>
+      <div>
+        <h2>Score Multiplier</h2>
+        <p>Multiply your score after a level by x2. Can only be used once</p>
+        <button id = "purchasebtn3">Buy 500💰 </button>
+      </div>
+    </div>
+    <div class="category"id="bonustokensection">
+      <h1>Bonus Tokens</h1>
+      <div>
+        <h2>Coins x2</h2>
+        <p>Multiply coins after a level by x2</p>
+        <button id="purchasebtn4">Buy 200💰 </button>
+      </div>
+      <div>
+        <h2>Coins x5</h2>
+        <p>Multiply coins after a level by x5</p>
+        <button id="purchasebtn5">Buy 500💰 </button>
+      </div>
+      <div>
+        <h2>Coins x10</h2>
+        <p>Multiply coins after a level by x10</p>
+        <button id="purchasebtn6">Buy 1000💰 </button>
+      </div>
+    </div>
+  </div>
   <div id="loadscreen">
     <h1>TAP BALL</h1>
     <h2>LOADING......</h2>
@@ -235,7 +350,7 @@
     <h1>Game Over</h1>
     <h1 id="finalscore">Score: </h1>
     <button id="retrybtn">RETRY</button>
-    <button id="inventorybtn1">INVENTORY</button>
+    <button id="inventorybtn2">INVENTORY</button>
     <button id="quitbtn2">QUIT</button>
     
   </div>
@@ -260,6 +375,7 @@
     let bottomHud = document.getElementById("bottom-hud")
     let loadscreen = document.getElementById("loadscreen")
     
+    //BUTTONS
     let playbtn = document.getElementById("playbtn")
     let modebtn = document.getElementById("modebtn")
     let shopbtn = document.getElementById("shopbtn")
@@ -277,10 +393,25 @@
     let normalmode = document.getElementById("normal")
     let timedmode = document.getElementById("timed")
     let endlessmode = document.getElementById("endless")
+    
+    let backbtn1 = document.getElementById("backbtn1")
+    let purchasebtn1 = document.getElementById("purchasebtn1")
+    let purchasebtn2 = document.getElementById("purchasebtn2")
+    let purchasebtn3 = document.getElementById("purchasebtn3")
+    let purchasebtn4 = document.getElementById("purchasebtn4")
+    let purchasebtn5 = document.getElementById("purchasebtn5")
+    let purchasebtn6 = document.getElementById("purchasebtn6")
 
+    let inventorybtn1 = document.getElementById("inventorybtn1")
+    let inventorybtn2 = document.getElementById("inventorybtn2")
+    let inventorybtn3 = document.getElementById("inventorybtn3")
+    
+    //TEXT LABELS
     let timer = document.getElementById("timer")
     let levelText = document.getElementById("level")
     let finalscore = document.getElementById("finalscore")
+    let modedisplay = document.getElementById("modedisplay")
+    let coinsdisplay = document.getElementById("coins-display")
     
     let inventory = []
     
@@ -314,13 +445,15 @@
       }
     }
     class PowerUp extends Item{
-      constructor(poweruptype,effectduration){
+      constructor(name,itemtype,price,poweruptype,effectduration){
+        super(name,itemtype,price)
         this.poweruptype = poweruptype
         this.effectduration = effectduration
       }
     }
     class BonusTokens extends Item{
-      constructor(bonusmultiplier){
+      constructor(name,itemtype,price,bonusmultiplier){
+        super(name,itemtype,price)
         this.bonusmultiplier = bonusmultiplier
       }
     }
@@ -466,9 +599,66 @@ pausebtn.onclick = pauseFunc
 //MODE BUTTONS FUNCTIONS
 modebtn.addEventListener("click",()=>{modeOptions.style.display = "inline-block"})
 closebtn.addEventListener("click",()=>{modeOptions.style.display = "none"})
-normalmode.addEventListener("click",()=>{mode = "normal"})
-timedmode.addEventListener("click",()=>{mode = "timed"})
-endlessmode.addEventListener("click",()=>{mode = "endless"})
+normalmode.addEventListener("click",()=>{
+  mode = "Normal"
+  modedisplay.textContent = "Mode : "+ mode
+})
+timedmode.addEventListener("click",()=>{
+  mode = "Timed"
+  modedisplay.textContent = "Mode : "+ mode
+})
+endlessmode.addEventListener("click",()=>{
+  mode = "Endless"
+  modedisplay.textContent = "Mode : "+ mode
+})
+
+//SHOP BUTTONS
+shopbtn.addEventListener("click",()=>{
+  menu.style.display = "none"
+  shopmenu.style.display = "flex"
+})
+
+backbtn1.addEventListener("click",()=>{
+  shopmenu.style.display = "none"
+  menu.style.display = "block"
+})
+
+purchasebtn1.addEventListener("click",()=>{
+  if(coins>=500){
+    let timestop = new PowerUp("Time-Stop","PowerUp",500,"Time PowerUp",5000)
+    inventory.push(timestop)
+    coins-=timestop.price
+    coinsdisplay.textContent = "💰 Coins " + coins
+    console.log(inventory)
+    console.log(coins)
+  }
+  else {
+    console.log("Not enough coins")
+  }  
+})
+purchasebtn2.addEventListener("click",()=>{
+  if(coins>=500){
+    let autoclicker = new PowerUp("Auto Clicker","PowerUp",500,"Clicker PowerUp",5000)
+    inventory.push(autoclicker)
+    coins-=autoclicker.price
+    coinsdisplay.textContent = "💰 Coins " + coins
+  }
+  else {
+    console.log("Not enough coins")
+  }  
+})
+purchasebtn3.addEventListener("click",()=>{
+  if(coins>=500){
+    let scoremultiplier = new PowerUp("Score Multiplier","PowerUp",500,"Multiplier PowerUp",5000)
+    inventory.push(scoremultiplier)
+    coins-=scoremultiplier.price
+    coinsdisplay.textContent = "💰 Coins " + coins
+  }
+  else {
+    console.log("Not enough coins")
+  }  
+})
+
 
   </script>
 </body>
