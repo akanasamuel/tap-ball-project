@@ -45,7 +45,7 @@
       border-radius: 10px;
       text-align: center;
       box-shadow: 1px 1px 1px 1px lime;
-      display: block;
+      display: none;
       
     }
     #menu button{
@@ -152,6 +152,49 @@
       padding: 0px;
       transform: scale(1.5);
       left: 10px;
+    }
+    #inventorymenu{
+      display: flex;
+      flex-direction: column;
+      align-items: center;   
+      justify-self: center;
+      width: 90%;
+      height: 95vh;
+      background: black;
+      border: 2px solid white;
+      border-radius: 10px;
+      position: relative;
+      display: ;
+      
+    }
+    #inventoryheader{
+      display: flex;
+      justify-content: space-between;
+      height: 20%;
+      border-bottom: 2px solid white;
+    }
+    #backbtn2{
+      position: absolute;
+      left: 10px;
+      padding: 0px;
+      transform: scale(1.5);
+    }
+    #inventoryitems{
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      height: 10%;
+      border-bottom: 2px solid white;
+      border-top: 2px solid white;
+    }
+    #item-description{
+      display: block;
+      width: 40%;
+      height: 70%;
+      border: 2px solid white;
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
     }
     #loadscreen{
       display: flex;
@@ -332,10 +375,63 @@
       </div>
     </div>
   </div>
+  <div id="inventorymenu">
+    <div id="inventoryheader">
+      <button id="backbtn2">🔙</button>
+      <h1>Inventory</h1>
+    </div>
+    <div id="inventoryitems">
+      <div>
+        <h1>Power Ups</h1>
+      </div>
+      <div>
+        <h1>Tokens</h1>
+      </div>
+      <div>
+        <h1>Special</h1>
+      </div>
+    </div>
+    <div id="item-description">
+      <h1>Item description</h1>
+    </div>
+    <div id="powerupitems">
+      <div id="no-powerup">
+        <h1>You have no power ups</h1>
+      </div>
+      <div>
+        
+      </div>
+      <div>
+        
+      </div>
+      <div>
+        
+      </div>
+    </div>
+    <div id="bonustokenitems">
+      <div id="no-tokens">
+        <h1>You have no tokens</h1>
+      </div>
+      <div>
+        
+      </div>
+      <div>
+        
+      </div>
+      <div>
+        
+      </div>
+    </div>
+    <div id="specialitems">
+      <div id="no-special">
+        <h1>You have no special items.</h1>
+      </div>
+    </div>
+  </div>
   <div id="loadscreen">
     <h1>TAP BALL</h1>
     <h2>LOADING......</h2>
-    <h2>Tips : </h2>
+    <h2 id="tipstext">Tips : </h2>
   </div>
   <div id="winWindow">
     <h1> You Win!</h1>
